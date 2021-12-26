@@ -70,10 +70,12 @@ void generate_red_edges(Graph& graph, std::mutex& graph_edges_mutex) {
         const std::lock_guard lock(graph_edges_mutex);
         const auto& level_for_red_edge =
             graph.get_vertex_ids_at_depth(depth + 2);
-        if (level_for_red_edge.size() > 0)
+        if (level_for_red_edge.size() > 0) {
+          const std::lock_guard lock(graph_edges_mutex);
           graph.add_edge(
               vertex_id,
               level_for_red_edge[get_random_number(level_for_red_edge.size())]);
+        }
       }
     }
   }
